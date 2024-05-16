@@ -31,11 +31,7 @@ public class Login extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(intent);
-            finish();
-        }
+
     }
 
     @Override
@@ -83,18 +79,32 @@ public class Login extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(Login.this, "Authentication successful.",
-                                            Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
+                                    handleLoginResult(task);
                                 } else {
-                                    Toast.makeText(Login.this, "Authentication failed.",
+                                    Toast.makeText(Login.this, "Please fill all fields!",
                                             Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
             }
         });
+    }
+    private void handleLoginResult(Task<AuthResult> task) {
+        if (task.isSuccessful()) {
+            // User login successful
+            FirebaseUser user = mAuth.getCurrentUser();
+            if (user != null && user.isEmailVerified()) {
+                // User is verified, proceed to main activity
+                Toast.makeText(Login.this, "Login successful!", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(Login.this, MainActivity.class));
+                finish();
+            } else {
+                // User is not verified
+                Toast.makeText(Login.this, "Please verify your email first.", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            // User login failed
+            Toast.makeText(Login.this, "Login failed. Please check your credentials.", Toast.LENGTH_SHORT).show();
+        }
     }
 }

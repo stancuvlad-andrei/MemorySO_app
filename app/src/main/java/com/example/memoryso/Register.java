@@ -23,6 +23,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Register extends AppCompatActivity {
     EditText mail, pass;
     Button reg, log;
@@ -65,36 +68,53 @@ public class Register extends AppCompatActivity {
         reg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email;
-                String password;
-
-                email = String.valueOf(mail.getText());
-                password = String.valueOf(pass.getText());
-
-                if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(Register.this, "Please enter your email", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (TextUtils.isEmpty(password)) {
-                    Toast.makeText(Register.this, "Please enter your password", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(Register.this, "Account created.",
-                                            Toast.LENGTH_SHORT).show();
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Toast.makeText(Register.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+                    registerUser();
             }
         });
+    }
+    private void registerUser() {
+        String email = mail.getText().toString().trim();
+        String password = pass.getText().toString().trim();
+
+
+        // Validate input fields
+        if ( TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
+
+
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+
+                        FirebaseUser user = mAuth.getCurrentUser();
+
+
+
+
+
+                        user.sendEmailVerification()
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+
+                                            startActivity(new Intent(Register.this, Login.class));
+                                            finish();
+                                            Toast.makeText(Register.this, "Registration successful. Please check your email for verification.", Toast.LENGTH_SHORT).show();
+                                        } else {
+
+                                            Toast.makeText(Register.this, "Failed to send verification email.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                    } else {
+
+                        Toast.makeText(Register.this, "Error registering user: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }
