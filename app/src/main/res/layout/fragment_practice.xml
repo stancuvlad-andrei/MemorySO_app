@@ -14,85 +14,95 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <RadioGroup
-                android:id="@+id/algorithm_radio_group"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:layout_marginBottom="16dp">
-
-                <RadioButton
-                    android:id="@+id/first_fit_radio"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="FirstFit"
-                    android:layout_marginEnd="8dp" />
-
-                <RadioButton
-                    android:id="@+id/best_fit_radio"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="BestFit"
-                    android:layout_marginEnd="8dp" />
-
-                <RadioButton
-                    android:id="@+id/worst_fit_radio"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="WorstFit"
-                    android:layout_marginEnd="8dp" />
-
-                <RadioButton
-                    android:id="@+id/next_fit_radio"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="NextFit" />
-
-            </RadioGroup>
-
             <EditText
                 android:id="@+id/memory_size_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Memory Size" />
+                android:hint="Memory Size"
+                android:inputType="number" />
 
             <EditText
                 android:id="@+id/num_processes_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Number of Processes" />
-
-            <EditText
-                android:id="@+id/num_operations_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Number of Operations" />
+                android:hint="Number of Processes"
+                android:inputType="number" />
 
             <LinearLayout
                 android:id="@+id/process_sizes_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:orientation="vertical"
+                android:layout_marginTop="8dp" />
+
+            <EditText
+                android:id="@+id/num_operations_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Number of Operations"
+                android:inputType="number" />
 
             <LinearLayout
                 android:id="@+id/operation_sizes_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:orientation="vertical"
+                android:layout_marginTop="8dp" />
+
+            <RadioGroup
+                android:id="@+id/algorithm_radio_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
+
+                <RadioButton
+                    android:id="@+id/first_fit_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="First Fit" />
+
+                <RadioButton
+                    android:id="@+id/best_fit_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Best Fit" />
+
+                <RadioButton
+                    android:id="@+id/worst_fit_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Worst Fit" />
+
+                <RadioButton
+                    android:id="@+id/next_fit_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Next Fit" />
+
+            </RadioGroup>
 
             <Button
                 android:id="@+id/allocate_button"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Allocate Memory" />
+                android:text="Allocate"
+                android:layout_marginTop="8dp" />
 
             <TextView
                 android:id="@+id/allocation_status_text_view"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:layout_marginTop="8dp" />
+
+            <LinearLayout
+                android:id="@+id/visualization_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp"
+                android:padding="8dp"
+                android:background="#f0f0f0" />
 
         </LinearLayout>
     </ScrollView>

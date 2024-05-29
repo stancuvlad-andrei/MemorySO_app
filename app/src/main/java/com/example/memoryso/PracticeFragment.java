@@ -1,46 +1,36 @@
 package com.example.memoryso;
 
 import android.os.Bundle;
-
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link PracticeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class PracticeFragment extends Fragment {
     private EditText memorySizeInput;
     private EditText numProcessesInput;
     private EditText numOperationsInput;
     private LinearLayout processSizesLayout;
     private LinearLayout operationSizesLayout;
+    private LinearLayout visualizationLayout;
     private Button allocateButton;
     private RadioGroup algorithmRadioGroup;
     private int selectedAlgorithm = 0;
+    private int nextFitIndex = 0;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -48,15 +38,6 @@ public class PracticeFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PracticeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static PracticeFragment newInstance(String param1, String param2) {
         PracticeFragment fragment = new PracticeFragment();
         Bundle args = new Bundle();
@@ -83,43 +64,33 @@ public class PracticeFragment extends Fragment {
         numOperationsInput = rootView.findViewById(R.id.num_operations_input);
         processSizesLayout = rootView.findViewById(R.id.process_sizes_layout);
         operationSizesLayout = rootView.findViewById(R.id.operation_sizes_layout);
+        visualizationLayout = rootView.findViewById(R.id.visualization_layout);
         allocateButton = rootView.findViewById(R.id.allocate_button);
         algorithmRadioGroup = rootView.findViewById(R.id.algorithm_radio_group);
 
         allocateButton.setOnClickListener(v -> {
-            int memorySize = Integer.parseInt(memorySizeInput.getText().toString());
-            int numProcesses = Integer.parseInt(numProcessesInput.getText().toString());
-            int numOperations = Integer.parseInt(numOperationsInput.getText().toString());
-            List<Integer> processSizes = getProcessSizes(processSizesLayout);
-            List<String> operations = getOperations(operationSizesLayout);
-
-            performMemoryAllocation(memorySize, processSizes, operations, selectedAlgorithm);
+            if (validateInputs()) {
+                int memorySize = Integer.parseInt(memorySizeInput.getText().toString());
+                int numProcesses = Integer.parseInt(numProcessesInput.getText().toString());
+                int numOperations = Integer.parseInt(numOperationsInput.getText().toString());
+                List<Integer> processSizes = getProcessSizes(processSizesLayout);
+                List<String> operations = getOperations(operationSizesLayout);
+                performMemoryAllocation(memorySize, processSizes, operations, selectedAlgorithm);
+            }
         });
 
-        numProcessesInput.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
+        numProcessesInput.addTextChangedListener(new SimpleTextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 updateProcessSizeInputs();
             }
-
-            @Override
-            public void afterTextChanged(Editable s) {}
         });
 
-        numOperationsInput.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
+        numOperationsInput.addTextChangedListener(new SimpleTextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 updateOperationInputs();
             }
-
-            @Override
-            public void afterTextChanged(Editable s) {}
         });
 
         algorithmRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
@@ -134,35 +105,27 @@ public class PracticeFragment extends Fragment {
             }
         });
 
-
-
         return rootView;
     }
 
-
+    private boolean validateInputs() {
+        return !isEmpty(memorySizeInput) && !isEmpty(numProcessesInput) && !isEmpty(numOperationsInput);
+    }
 
     private void updateProcessSizeInputs() {
-        int numProcesses = Integer.parseInt(numProcessesInput.getText().toString());
+        int numProcesses = getIntegerFromEditText(numProcessesInput);
         processSizesLayout.removeAllViews();
         for (int i = 0; i < numProcesses; i++) {
-            EditText processSizeInput = new EditText(requireContext());
-            processSizeInput.setLayoutParams(new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT));
-            processSizeInput.setHint("Process " + (i + 1) + " Size");
+            EditText processSizeInput = createEditText("Process " + (i + 1) + " Size");
             processSizesLayout.addView(processSizeInput);
         }
     }
 
     private void updateOperationInputs() {
-        int numOperations = Integer.parseInt(numOperationsInput.getText().toString());
+        int numOperations = getIntegerFromEditText(numOperationsInput);
         operationSizesLayout.removeAllViews();
         for (int i = 0; i < numOperations; i++) {
-            EditText operationSizeInput = new EditText(requireContext());
-            operationSizeInput.setLayoutParams(new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT));
-            operationSizeInput.setHint("Operation " + (i + 1));
+            EditText operationSizeInput = createEditText("Operation " + (i + 1));
             operationSizesLayout.addView(operationSizeInput);
         }
     }
@@ -180,13 +143,8 @@ public class PracticeFragment extends Fragment {
         List<String> operations = new ArrayList<>();
         for (int i = 0; i < layout.getChildCount(); i++) {
             EditText operationInput = (EditText) layout.getChildAt(i);
-            String operation = operationInput.getText().toString();
-            if (operation.startsWith("+p")) {
-                operations.add(operation);
-            } else {
-                // Handle invalid operation format
-                operations.add(""); // or throw an exception
-            }
+            String operation = operationInput.getText().toString().trim();
+            operations.add(operation);
         }
         return operations;
     }
@@ -206,22 +164,237 @@ public class PracticeFragment extends Fragment {
         switch (algorithm) {
             case 0:
                 allocationStatus.append("First Fit");
+                firstFit(memorySize, processSizes, operations);
                 break;
             case 1:
                 allocationStatus.append("Best Fit");
+                bestFit(memorySize, processSizes, operations);
                 break;
             case 2:
                 allocationStatus.append("Worst Fit");
+                worstFit(memorySize, processSizes, operations);
                 break;
             case 3:
                 allocationStatus.append("Next Fit");
+                nextFit(memorySize, processSizes, operations);
                 break;
         }
-
         TextView allocationStatusTextView = getView().findViewById(R.id.allocation_status_text_view);
         if (allocationStatusTextView != null) {
             allocationStatusTextView.setText(allocationStatus.toString());
         }
     }
 
+    private void firstFit(int memorySize, List<Integer> processSizes, List<String> operations) {
+        List<Integer> memory = new ArrayList<>(Collections.nCopies(memorySize, 0));
+        int step = 1;
+        for (String operation : operations) {
+            if (operation.startsWith("+p")) {
+                int processIndex = Integer.parseInt(operation.substring(2)) - 1;
+                int processSize = processSizes.get(processIndex);
+                boolean allocated = false;
+                for (int i = 0; i < memory.size(); i++) {
+                    if (memory.get(i) == 0 && memory.size() - i >= processSize) {
+                        for (int j = i; j < i + processSize; j++) {
+                            memory.set(j, processSize);
+                        }
+                        allocated = true;
+                        break;
+                    }
+                }
+                if (!allocated) {
+                    // Process could not be allocated
+                }
+                visualizeStep(memorySize, memory, step++);
+            } else if (operation.startsWith("-p")) {
+                int processIndex = Integer.parseInt(operation.substring(2)) - 1;
+                int processSize = processSizes.get(processIndex);
+                for (int i = 0; i < memory.size(); i++) {
+                    if (memory.get(i) == processSize) {
+                        for (int j = i; j < i + processSize; j++) {
+                            memory.set(j, 0);
+                        }
+                        break;
+                    }
+                }
+                visualizeStep(memorySize, memory, step++);
+            }
+        }
+    }
+
+    private void bestFit(int memorySize, List<Integer> processSizes, List<String> operations) {
+        List<Integer> memory = new ArrayList<>(Collections.nCopies(memorySize, 0));
+        int step = 1;
+        for (String operation : operations) {
+            if (operation.startsWith("+p")) {
+                int processIndex = Integer.parseInt(operation.substring(2)) - 1;
+                int processSize = processSizes.get(processIndex);
+                int bestFitIndex = -1;
+                int bestFitSize = Integer.MAX_VALUE;
+                for (int i = 0; i < memory.size(); i++) {
+                    if (memory.get(i) == 0) {
+                        int j = i;
+                        while (j < memory.size() && memory.get(j) == 0) {
+                            j++;
+                        }
+                        int freeBlockSize = j - i;
+                        if (freeBlockSize >= processSize && freeBlockSize < bestFitSize) {
+                            bestFitIndex = i;
+                            bestFitSize = freeBlockSize;
+                        }
+                        i = j;
+                    }
+                }
+                if (bestFitIndex != -1) {
+                    for (int j = bestFitIndex; j < bestFitIndex + processSize; j++) {
+                        memory.set(j, processSize);
+                    }
+                } else {
+                    // Process could not be allocated
+                }
+                visualizeStep(memorySize, memory, step++);
+            } else if (operation.startsWith("-p")) {
+                int processIndex = Integer.parseInt(operation.substring(2)) - 1;
+                int processSize = processSizes.get(processIndex);
+                for (int i = 0; i < memory.size(); i++) {
+                    if (memory.get(i) == processSize) {
+                        for (int j = i; j < i + processSize; j++) {
+                            memory.set(j, 0);
+                        }
+                        break;
+                    }
+                }
+                visualizeStep(memorySize, memory, step++);
+            }
+        }
+    }
+
+    private void worstFit(int memorySize, List<Integer> processSizes, List<String> operations) {
+        List<Integer> memory = new ArrayList<>(Collections.nCopies(memorySize, 0));
+        int step = 1;
+        for (String operation : operations) {
+            if (operation.startsWith("+p")) {
+                int processIndex = Integer.parseInt(operation.substring(2)) - 1;
+                int processSize = processSizes.get(processIndex);
+                int worstFitIndex = -1;
+                int worstFitSize = 0;
+                for (int i = 0; i < memory.size(); i++) {
+                    if (memory.get(i) == 0) {
+                        int j = i;
+                        while (j < memory.size() && memory.get(j) == 0) {
+                            j++;
+                        }
+                        int freeBlockSize = j - i;
+                        if (freeBlockSize >= processSize && freeBlockSize > worstFitSize) {
+                            worstFitIndex = i;
+                            worstFitSize = freeBlockSize;
+                        }
+                        i = j;
+                    }
+                }
+                if (worstFitIndex != -1) {
+                    for (int j = worstFitIndex; j < worstFitIndex + processSize; j++) {
+                        memory.set(j, processSize);
+                    }
+                } else {
+                    // Process could not be allocated
+                }
+                visualizeStep(memorySize, memory, step++);
+            } else if (operation.startsWith("-p")) {
+                int processIndex = Integer.parseInt(operation.substring(2)) - 1;
+                int processSize = processSizes.get(processIndex);
+                for (int i = 0; i < memory.size(); i++) {
+                    if (memory.get(i) == processSize) {
+                        for (int j = i; j < i + processSize; j++) {
+                            memory.set(j, 0);
+                        }
+                        break;
+                    }
+                }
+                visualizeStep(memorySize, memory, step++);
+            }
+        }
+    }
+
+    private void nextFit(int memorySize, List<Integer> processSizes, List<String> operations) {
+        List<Integer> memory = new ArrayList<>(Collections.nCopies(memorySize, 0));
+        int step = 1;
+        for (String operation : operations) {
+            if (operation.startsWith("+p")) {
+                int processIndex = Integer.parseInt(operation.substring(2)) - 1;
+                int processSize = processSizes.get(processIndex);
+                boolean allocated = false;
+                for (int i = nextFitIndex; i < memory.size(); i++) {
+                    if (memory.get(i) == 0 && memory.size() - i >= processSize) {
+                        for (int j = i; j < i + processSize; j++) {
+                            memory.set(j, processSize);
+                        }
+                        allocated = true;
+                        nextFitIndex = i + processSize;
+                        break;
+                    }
+                }
+                if (!allocated) {
+                    for (int i = 0; i < nextFitIndex; i++) {
+                        if (memory.get(i) == 0 && memory.size() - i >= processSize) {
+                            for (int j = i; j < i + processSize; j++) {
+                                memory.set(j, processSize);
+                            }
+                            allocated = true;
+                            nextFitIndex = i + processSize;
+                            break;
+                        }
+                    }
+                }
+                if (!allocated) {
+                    // Process could not be allocated
+                }
+                visualizeStep(memorySize, memory, step++);
+            } else if (operation.startsWith("-p")) {
+                int processIndex = Integer.parseInt(operation.substring(2)) - 1;
+                int processSize = processSizes.get(processIndex);
+                for (int i = 0; i < memory.size(); i++) {
+                    if (memory.get(i) == processSize) {
+                        for (int j = i; j < i + processSize; j++) {
+                            memory.set(j, 0);
+                        }
+                        break;
+                    }
+                }
+                visualizeStep(memorySize, memory, step++);
+            }
+        }
+    }
+
+    private EditText createEditText(String hint) {
+        EditText editText = new EditText(getActivity());
+        editText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        editText.setHint(hint);
+        editText.setInputType(android.text.InputType.TYPE_CLASS_TEXT);
+        return editText;
+    }
+
+    private boolean isEmpty(EditText editText) {
+        return editText.getText().toString().trim().isEmpty();
+    }
+
+    private int getIntegerFromEditText(EditText editText) {
+        return Integer.parseInt(editText.getText().toString().trim());
+    }
+
+    abstract class SimpleTextWatcher implements TextWatcher {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+        @Override
+        public void afterTextChanged(Editable s) { }
+    }
+
+    private void visualizeStep(int memorySize, List<Integer> memory, int step) {
+        // Display the memory contents in a new TextView for each step
+        TextView stepView = new TextView(getActivity());
+        stepView.setText("Step " + step + ": " + memory.toString());
+        stepView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.step_background));
+        stepView.setPadding(8, 8, 8, 8);
+        visualizationLayout.addView(stepView);
+    }
 }
