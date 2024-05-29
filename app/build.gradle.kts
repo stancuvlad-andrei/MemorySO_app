@@ -44,4 +44,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation (libs.glide)
+    annotationProcessor (libs.compiler)
+    implementation (libs.android.gif.drawable)
 }

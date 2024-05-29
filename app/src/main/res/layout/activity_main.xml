@@ -33,7 +33,7 @@
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentContainerView"
             android:name="com.example.memoryso.AccountFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_width="411dp"
+            android:layout_height="566dp" />
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
