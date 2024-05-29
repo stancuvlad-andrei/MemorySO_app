@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#414141"
     tools:context=".TheoryFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -32,55 +33,55 @@
                 android:id="@+id/article_subheading1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Problema memoriei"
                 android:layout_marginTop="8dp"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp"
                 android:paddingTop="8dp"
-                android:paddingBottom="8dp" />
+                android:paddingEnd="16dp"
+                android:paddingBottom="8dp"
+                android:text="Problema memoriei"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/article_subheading2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Acest tip de subiecte se referă la gestiunea memoriei, într-o situație simplă (swapping), folosind, de regulă, o listă înlănțuită de segmente de memorie (goluri și procese). Sunt avute în vedere o serie de execuții relativ simple ale unora dintre algoritmii prezentați, iar pe baza acestora, sunt solicitate o serie de răspunsuri la întrebări. În cadrul enunțului este prezentat și modul în care va fi rezolvată o eventuală eroare de utilizare a memoriei (situații în care procesele nu pot fi încărcate în memorie), respectiv momentele în care au loc operații asupra proceselor încărcate în memorie."
                 android:layout_marginTop="8dp"
-                android:textSize="25sp"
-                android:textColor="@android:color/white"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp"
                 android:paddingTop="8dp"
-                android:paddingBottom="8dp" />
+                android:paddingEnd="16dp"
+                android:paddingBottom="8dp"
+                android:text="Acest tip de subiecte se referă la gestiunea memoriei, într-o situație simplă (swapping), folosind, de regulă, o listă înlănțuită de segmente de memorie (goluri și procese). Sunt avute în vedere o serie de execuții relativ simple ale unora dintre algoritmii prezentați, iar pe baza acestora, sunt solicitate o serie de răspunsuri la întrebări. În cadrul enunțului este prezentat și modul în care va fi rezolvată o eventuală eroare de utilizare a memoriei (situații în care procesele nu pot fi încărcate în memorie), respectiv momentele în care au loc operații asupra proceselor încărcate în memorie."
+                android:textColor="@android:color/white"
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/article_subheading3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Exemple de executie"
                 android:layout_marginTop="8dp"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp"
                 android:paddingTop="8dp"
-                android:paddingBottom="8dp" />
+                android:paddingEnd="16dp"
+                android:paddingBottom="8dp"
+                android:text="Exemple de executie"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/article_subheading4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Fiecare linie reprezintă o nouă operație cu memoria, zonele colorate reprezintă procese, și mărimea acestora în memorie. Rezolvarea nu trebuie să repete acest model :) O reprezentare corectă a evoluției cozilor poate fi suficientă."
                 android:layout_marginTop="8dp"
-                android:textSize="25sp"
-                android:textColor="@android:color/white"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp"
                 android:paddingTop="8dp"
-                android:paddingBottom="8dp" />
+                android:paddingEnd="16dp"
+                android:paddingBottom="8dp"
+                android:text="Fiecare linie reprezintă o nouă operație cu memoria, zonele colorate reprezintă procese, și mărimea acestora în memorie. Rezolvarea nu trebuie să repete acest model :) O reprezentare corectă a evoluției cozilor poate fi suficientă."
+                android:textColor="@android:color/white"
+                android:textSize="25sp" />
 
         </LinearLayout>
 

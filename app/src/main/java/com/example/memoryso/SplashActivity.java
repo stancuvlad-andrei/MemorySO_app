@@ -10,6 +10,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.Target;
 
+import pl.droidsonroids.gif.GifImageView;
+
 public class SplashActivity extends AppCompatActivity {
 
     private static final String TAG = "SplashActivity";
@@ -19,13 +21,8 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        ImageView gifProgressBar = findViewById(R.id.spinning_globe);
-        Glide.with(this)
-                .asGif()
-                .load(R.drawable.robo)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                .into(gifProgressBar);
+        GifImageView gifImageView = findViewById(R.id.spinning_globe);
+        gifImageView.setImageResource(R.drawable.robotel);
 
         new Handler().postDelayed(new Runnable() {
             @Override
