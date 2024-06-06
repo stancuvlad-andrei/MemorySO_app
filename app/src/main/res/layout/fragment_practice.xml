@@ -15,18 +15,33 @@
             android:orientation="vertical"
             android:padding="16dp">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Memory Size"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold" />
+
             <EditText
                 android:id="@+id/memory_size_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Memory Size"
+                android:hint="Enter memory size"
                 android:inputType="number" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Number of Processes"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp" />
 
             <EditText
                 android:id="@+id/num_processes_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Number of Processes"
+                android:hint="Enter number of processes"
                 android:inputType="number" />
 
             <LinearLayout
@@ -36,11 +51,19 @@
                 android:layout_marginTop="8dp"
                 android:orientation="vertical" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Number of Operations"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp" />
+
             <EditText
                 android:id="@+id/num_operations_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Number of Operations"
+                android:hint="Enter number of operations"
                 android:inputType="number" />
 
             <LinearLayout
@@ -50,11 +73,19 @@
                 android:layout_marginTop="8dp"
                 android:orientation="vertical" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Allocation Algorithm"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp" />
+
             <RadioGroup
                 android:id="@+id/algorithm_radio_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:orientation="horizontal">
 
                 <RadioButton

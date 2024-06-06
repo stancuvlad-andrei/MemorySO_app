@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
         //EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        // Adjust windowSoftInputMode to prevent resizing the layout when the soft keyboard appears
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
 
         auth = FirebaseAuth.getInstance();

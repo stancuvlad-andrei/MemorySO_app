@@ -1,5 +1,6 @@
 package com.example.memoryso;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import java.util.ArrayList;
@@ -116,7 +118,9 @@ public class PracticeFragment extends Fragment {
         int numProcesses = getIntegerFromEditText(numProcessesInput);
         processSizesLayout.removeAllViews();
         for (int i = 0; i < numProcesses; i++) {
-            EditText processSizeInput = createEditText("Process " + (i + 1) + " Size");
+            TextView processSizeLabel = createLabel("Process " + (i + 1) + " Size:");
+            EditText processSizeInput = createEditText("Enter size for Process " + (i + 1));
+            processSizesLayout.addView(processSizeLabel);
             processSizesLayout.addView(processSizeInput);
         }
     }
@@ -125,15 +129,20 @@ public class PracticeFragment extends Fragment {
         int numOperations = getIntegerFromEditText(numOperationsInput);
         operationSizesLayout.removeAllViews();
         for (int i = 0; i < numOperations; i++) {
-            EditText operationSizeInput = createEditText("Operation " + (i + 1));
+            TextView operationLabel = createLabel("Operation " + (i + 1) + ":");
+            EditText operationSizeInput = createEditText("Enter size for Operation " + (i + 1));
+            // Remove this line to avoid setting the input type to numeric
+            // operationSizeInput.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
+            operationSizesLayout.addView(operationLabel);
             operationSizesLayout.addView(operationSizeInput);
         }
     }
 
+
     private List<Integer> getProcessSizes(LinearLayout layout) {
         List<Integer> processSizes = new ArrayList<>();
-        for (int i = 0; i < layout.getChildCount(); i++) {
-            EditText processSizeInput = (EditText) layout.getChildAt(i);
+        for (int i = 0; i < layout.getChildCount(); i += 2) {
+            EditText processSizeInput = (EditText) layout.getChildAt(i + 1);
             processSizes.add(Integer.parseInt(processSizeInput.getText().toString()));
         }
         return processSizes;
@@ -141,8 +150,8 @@ public class PracticeFragment extends Fragment {
 
     private List<String> getOperations(LinearLayout layout) {
         List<String> operations = new ArrayList<>();
-        for (int i = 0; i < layout.getChildCount(); i++) {
-            EditText operationInput = (EditText) layout.getChildAt(i);
+        for (int i = 0; i < layout.getChildCount(); i += 2) {
+            EditText operationInput = (EditText) layout.getChildAt(i + 1);
             String operation = operationInput.getText().toString().trim();
             operations.add(operation);
         }
@@ -370,8 +379,18 @@ public class PracticeFragment extends Fragment {
         EditText editText = new EditText(getActivity());
         editText.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         editText.setHint(hint);
-        editText.setInputType(android.text.InputType.TYPE_CLASS_TEXT);
+        // Remove or comment out this line to avoid setting the input type to numeric
+        // editText.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
         return editText;
+    }
+
+
+    private TextView createLabel(String text) {
+        TextView textView = new TextView(getActivity());
+        textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        textView.setText(text);
+        textView.setTypeface(null, Typeface.BOLD);
+        return textView;
     }
 
     private boolean isEmpty(EditText editText) {
@@ -390,7 +409,6 @@ public class PracticeFragment extends Fragment {
     }
 
     private void visualizeStep(int memorySize, List<Integer> memory, int step) {
-        // Display the memory contents in a new TextView for each step
         TextView stepView = new TextView(getActivity());
         stepView.setText("Step " + step + ": " + memory.toString());
         stepView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.step_background));
